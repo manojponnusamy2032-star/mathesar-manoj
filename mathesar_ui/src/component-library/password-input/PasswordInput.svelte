@@ -61,10 +61,12 @@
     appearance="ghost"
     size="small"
     class="password-toggle-btn"
+    aria-label={showPassword ? 'Hide password' : 'Show password'}
+    aria-pressed={showPassword}
     on:click={togglePasswordVisibility}
     title={showPassword ? 'Hide password' : 'Show password'}
   >
-    <Icon data={showPassword ? faEyeSlash : faEye} label="" />
+    <Icon data={showPassword ? faEyeSlash : faEye} label={showPassword ? 'Hide password' : 'Show password'} />
   </Button>
 </div>
 
