@@ -35,10 +35,18 @@
       <label for="id_password" class="label-component">
         <span class="label-content">
           <span class="labeled-input-label">{% translate "Password" %}</span>
-          <span class="labeled-input-slot input">
+          <span class="labeled-input-slot input password-input-wrapper">
             <input type="password" name="password"
             class="input-element{% if form.password.errors %} has-error{% endif %}"
             autocomplete="current-password" required id="id_password">
+            <button type="button" class="password-toggle-btn" aria-label="{% translate 'Show password' %}" title="{% translate 'Show password' %}" onclick="togglePasswordVisibility(event)">
+              <svg class="password-icon eye-icon" viewBox="0 0 24 24" width="1.2em" height="1.2em" aria-hidden="true">
+                <path fill="currentColor" d="M12 5C7 5 2.73 8.11 1 12.46c1.73 4.35 6 7.54 11 7.54s9.27-3.19 11-7.54C21.27 8.11 17 5 12 5m0 9c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
+              </svg>
+              <svg class="password-icon eye-slash-icon" style="display: none;" viewBox="0 0 24 24" width="1.2em" height="1.2em" aria-hidden="true">
+                <path fill="currentColor" d="M11.83 9L5.5 2.16A9.773 9.773 0 0 1 12 2c5 0 9.27 3.11 11 7.46c-.5 1.25-1.2 2.45-2.05 3.56L19.84 13A7.989 7.989 0 0 0 12 8c-1.66 0-3.14.29-4.17.83m-1.42 1.41A2.884 2.884 0 0 0 8 12c0 1.66 1.34 3 3 3a2.884 2.884 0 0 0 1.59-.59L10.41 10.4zM2 4.27l2.28 2.28A11.804 11.804 0 0 0 2.46 11C4.19 15.39 8.5 18 12 18c1.46 0 2.92-.23 4.32-.67l2.4 2.4A19.232 19.232 0 0 1 12 20c-5 0-9.27-3.11-11-7.46zm19.46-4.73L19.73 2l-2.28 2.29A11.804 11.804 0 0 0 12 4c-5 0-9.27 3.11-11 7.46C2.19 15.39 6.5 18 12 18c1.46 0 2.92-.23 4.32-.67L21.73 22l2.28-2.28-2.27-2.27z"/>
+              </svg>
+            </button>
           </span>
           {% if form.password.errors %}
             <span class="help error">
@@ -50,6 +58,68 @@
         </span>
       </label>
     </div>
+    <style>
+      .password-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .password-input-wrapper .input-element {
+        padding-right: 2.5rem;
+      }
+      .password-toggle-btn {
+        position: absolute;
+        right: 0.25rem;
+        margin: 0;
+        padding: 0.25rem;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-text-muted, #666);
+        min-width: auto;
+        min-height: auto;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .password-toggle-btn:hover {
+        color: var(--color-text, #000);
+      }
+      .password-toggle-btn:focus {
+        outline: 2px solid var(--color-primary, #4a90e2);
+        outline-offset: 1px;
+      }
+      .password-icon {
+        display: inline-block;
+      }
+    </style>
+    <script>
+      function togglePasswordVisibility(event) {
+        event.preventDefault();
+        const form = event.target.closest('.password-input-wrapper');
+        const input = form.querySelector('input[type="password"], input[type="text"]');
+        const button = form.querySelector('.password-toggle-btn');
+        const eyeIcon = form.querySelector('.eye-icon');
+        const eyeSlashIcon = form.querySelector('.eye-slash-icon');
+        
+        if (input.type === 'password') {
+          input.type = 'text';
+          button.setAttribute('aria-label', '{% translate "Hide password" %}');
+          button.setAttribute('title', '{% translate "Hide password" %}');
+          eyeIcon.style.display = 'none';
+          eyeSlashIcon.style.display = 'inline-block';
+        } else {
+          input.type = 'password';
+          button.setAttribute('aria-label', '{% translate "Show password" %}');
+          button.setAttribute('title', '{% translate "Show password" %}');
+          eyeIcon.style.display = 'inline-block';
+          eyeSlashIcon.style.display = 'none';
+        }
+        input.focus();
+      }
+    </script>
     {% if form.non_field_errors %}
       <div class="message-box error-message">
         <div class="icon">&#9888;</div>
